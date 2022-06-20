@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/drawable/custom_bg_mapitem.xml" value="0.1485" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/drawable/custom_edt_bg.xml" value="0.1485" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/drawable/homecard_bg.xml" value="0.1485" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/drawable/visible_icon.xml" value="0.1485" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/activity_camera.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/activity_collection.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/activity_home.xml" value="0.22" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/activity_main.xml" value="0.19010416666666666" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/activity_sign_up.xml" value="0.22" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/activity_signin.xml" value="0.33" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/activity_splash.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/bottomsheet.xml" value="0.22" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/item_collection_map.xml" value="0.8256578947368421" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/item_project.xml" value="0.22" />
+        <entry key="..\:/Users/Dell/AndroidStudioProjects/Visio/app/src/main/res/layout/rcitem_btsheet.xml" value="0.36642335766423356" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

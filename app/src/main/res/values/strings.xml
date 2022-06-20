@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Visio</string>
+    <string name="map_key">AIzaSyBKBUtPMCQKpHeJjU9C1GZ2Ga-vXWnWurY</string>
+    <string name="service_text">By continuing, you agree to accept our</string>
+    <string name="policy_terms"><![CDATA[Privacy Policy & Terms of Service.]]></string>
+    <string name="sign_in">Sign In</string>
+    <string name="add_your_info_to_login">Add your info to login</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="don_t_have_an_account">Don\'t have an account ?</string>
+    <string name="sign_up_capital">SIGN UP</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="add_your_info_to_sign_up">Add your info to sign up</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="login">Login</string>
+    <string name="already_have_an_account">Already have an account ?</string>
+    <string name="collection_1">Collection 1</string>
+
+    //shapable image corner
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent10Percent" parent="">
+        <item name="cornerSize">7%</item>
+    </style>
+</resources>

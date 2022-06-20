@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".Activity.HomeActivity">
+
+    <RelativeLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_12sdp"
+        android:layout_marginVertical="@dimen/_17sdp">
+
+        <RelativeLayout
+            android:id="@+id/icon_drawer"
+            android:visibility="gone"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_icon_drawer" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icon_delete"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_37sdp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/icon_upload">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_icon_recyclebin" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/icon_upload"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_upload_cloud" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:background="@drawable/homecard_bg">
+
+        <TextView
+            android:id="@+id/tv_project"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_18sdp"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:layout_marginBottom="@dimen/_12sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Projects"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_13ssp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/project_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_project"
+            android:layout_marginHorizontal="@dimen/_18sdp"
+            tools:listitem="@layout/item_project" />
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btn_addproj"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_39sdp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/_15sdp"
+        android:layout_marginBottom="@dimen/_33sdp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="@dimen/_200sdp"
+        app:cardElevation="0dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_marginVertical="@dimen/_7sdp"
+                android:layout_marginStart="@dimen/_11sdp"
+                android:src="@drawable/ic_add_symbol" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_toEndOf="@id/icon"
+                android:layout_marginStart="@dimen/_7sdp"
+                android:layout_marginEnd="@dimen/_18sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:layout_centerVertical="true"
+                android:includeFontPadding="false"
+                android:text="Add Project"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_11sdp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
