@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.visio.Activity.CollectionActivity
-import com.example.visio.Activity.SignUpActivity
 import com.example.visio.DataModel.ProjectModel
 import com.example.visio.R
 

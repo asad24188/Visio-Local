@@ -1,4 +1,4 @@
-package com.example.visio.Activity
+package com.example.visio.Auth
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

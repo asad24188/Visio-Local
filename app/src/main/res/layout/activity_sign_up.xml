@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_bg_clr"
-    tools:context=".Activity.SignUpActivity">
+    tools:context=".Auth.SignUpActivity">
 
     <RelativeLayout
         android:id="@+id/header_layout"
@@ -70,6 +70,7 @@
                 android:src="@drawable/ic_email" />
 
             <EditText
+                android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
@@ -146,7 +147,7 @@
                 android:src="@drawable/ic_lock" />
 
             <EditText
-                android:id="@+id/edit_cunfPass"
+                android:id="@+id/editPassword2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toLeftOf="@+id/hidePassword1"
@@ -155,11 +156,11 @@
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center_vertical"
                 android:hint="@string/confirm_password"
-                android:textColorHint="@color/gray_text"
-                android:textColor="@color/black"
                 android:includeFontPadding="false"
                 android:inputType="textPassword"
                 android:paddingStart="@dimen/_8sdp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/gray_text"
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/_10ssp" />
 

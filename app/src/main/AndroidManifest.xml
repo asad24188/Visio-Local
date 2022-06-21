@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -17,19 +18,19 @@
         android:theme="@style/Theme.Visio"
         tools:targetApi="31">
         <activity
+            android:name=".ForgetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.CameraActivity"
-            android:exported="true" >
-        </activity>
-        <activity
-            android:name=".Activity.CollectionActivity"
-            android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".Activity.HomeActivity"
             android:exported="true"></activity>
         <activity
-            android:name=".Activity.SplashActivity"
+            android:name=".Activity.CollectionActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".Activity.HomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Auth.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Visio.NoActionBarAndStatusBar">
             <intent-filter>
@@ -39,10 +40,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.SignUpActivity"
+            android:name=".Auth.SignUpActivity"
             android:exported="true" />
         <activity
-            android:name=".Activity.SigninActivity"
+            android:name=".Auth.SigninActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
