@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_120sdp"
+    android:layout_height="@dimen/_85sdp"
+    android:background="@drawable/collection_item_bg"
+    android:layout_marginVertical="@dimen/_6sdp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="@dimen/_13sdp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_12sdp">
+
+        <TextView
+            android:id="@+id/tv_collection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/collection_1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12ssp" />
+
+        <RelativeLayout
+            android:id="@+id/id1_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_collection"
+            android:layout_marginTop="@dimen/_4sdp">
+
+            <ImageView
+                android:id="@+id/icon1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_point_black" />
+
+            <TextView
+                android:id="@+id/tv_id1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_toEndOf="@id/icon1"
+                android:fontFamily="@font/poppins_light"
+                android:includeFontPadding="false"
+                android:text="ID 1 : "
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp" />
+
+            <TextView
+                android:id="@+id/tv_id1value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/tv_id1"
+                android:fontFamily="@font/poppins_light"
+                android:includeFontPadding="false"
+                android:text="123"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/id2_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id1_layout"
+            android:layout_marginTop="@dimen/_2sdp">
+
+            <ImageView
+                android:id="@+id/icon2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_point_black" />
+
+            <TextView
+                android:id="@+id/tv_id2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_toEndOf="@id/icon2"
+                android:fontFamily="@font/poppins_light"
+                android:includeFontPadding="false"
+                android:text="ID 2 : "
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp" />
+
+            <TextView
+                android:id="@+id/tv_id2value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/tv_id2"
+                android:fontFamily="@font/poppins_light"
+                android:includeFontPadding="false"
+                android:text="345"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/id3_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id2_layout"
+            android:layout_marginTop="@dimen/_2sdp">
+
+            <ImageView
+                android:id="@+id/icon3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_point_black" />
+
+            <TextView
+                android:id="@+id/tv_id3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_toEndOf="@id/icon3"
+                android:fontFamily="@font/poppins_light"
+                android:includeFontPadding="false"
+                android:text="ID 3 : "
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp" />
+
+            <TextView
+                android:id="@+id/tv_id3value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/tv_id3"
+                android:fontFamily="@font/poppins_light"
+                android:includeFontPadding="false"
+                android:text="789"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_8ssp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

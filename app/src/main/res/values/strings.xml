@@ -16,6 +16,11 @@
     <string name="login">Login</string>
     <string name="already_have_an_account">Already have an account ?</string>
     <string name="collection_1">Collection 1</string>
+    <string name="previous_collections">Previous Collections</string>
+    <string name="done">Done</string>
+    <string name="log_gps">Log GPS</string>
+    <string name="next">Next</string>
+    <string name="id_2">ID 2</string>
 
     //shapable image corner
 

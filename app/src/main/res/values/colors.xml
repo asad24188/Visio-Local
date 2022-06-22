@@ -8,11 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#0000ffff</color>
+    <color name="black_tranparent">#CB000000</color>
     <color name="screen_bg_clr">#FBFBFB</color>
     <color name="gray_text">#A2A2A2</color>
     <color name="dark_gray">#7C7D7E</color>
     <color name="blue">#4044C9</color>
     <color name="edt_gray_border">#F3F3F3</color>
+    <color name="dark_clr">#242424</color>
+    <color name="light_gray">#606060</color>
     <color name="swan_clr">#B4B4B4</color>
     <color name="viewbar_clr">#343434</color>
 </resources>
