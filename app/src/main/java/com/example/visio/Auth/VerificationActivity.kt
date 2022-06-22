@@ -3,25 +3,22 @@ package com.example.visio.Auth
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.visio.databinding.ActivityForgetPasswordBinding
+import com.example.visio.databinding.ActivityVerificationBinding
 
-class ForgetPasswordActivity : AppCompatActivity() {
-    lateinit var binding: ActivityForgetPasswordBinding
+class VerificationActivity : AppCompatActivity() {
+    lateinit var binding: ActivityVerificationBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=ActivityForgetPasswordBinding.inflate(layoutInflater)
+        binding=ActivityVerificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.goBack.setOnClickListener {
             finish()
             overridePendingTransition(0, 0)
         }
-        binding.btnsend.setOnClickListener {
+        binding.verifyBtn.setOnClickListener {
             startActivity(
-                Intent(
-                    this,
-                    VerificationActivity::class.java
-                )
-            )
+                Intent(this, CreatePasswordActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION))
         }
     }
 }

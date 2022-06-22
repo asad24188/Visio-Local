@@ -2,10 +2,7 @@ package com.example.visio.Services
 
 import com.example.visio.DataModel.Login.LoginResponse
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ApiServices {
 //    @Header("Accept: application/json")
@@ -28,4 +25,5 @@ interface ApiServices {
         @Field("device_type") device_type: String,
         @Field("token") token: String
     ): Call<LoginResponse>
+
 }

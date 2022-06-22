@@ -33,6 +33,9 @@ class SigninActivity : AppCompatActivity() {
                 )
             )
         }
+        binding.tvforgot.setOnClickListener {
+          startActivity(Intent(this,ForgetPasswordActivity::class.java))
+        }
         binding.btnsignIn.setOnClickListener {
             var email=binding.emailEdit.text.toString()
             var password=binding.editPassword.text.toString()
