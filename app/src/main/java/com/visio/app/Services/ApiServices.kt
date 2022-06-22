@@ -1,0 +1,29 @@
+package com.visio.app.Services
+
+import com.visio.app.DataModel.Login.LoginResponse
+import retrofit2.Call
+import retrofit2.http.*
+
+interface ApiServices {
+//    @Header("Accept: application/json")
+
+    @POST("login")
+    @FormUrlEncoded
+    fun login (
+        @Field("email") email:String,
+        @Field("password") password:String,
+        @Field("device_type") device_type:String,
+        @Field("token") token:String
+    ): Call<LoginResponse>
+
+    @POST("signup")
+    @FormUrlEncoded
+    fun signUp(
+        @Field("email") email: String,
+        @Field("password") password: String,
+        @Field("confirm_password") confirm_password: String,
+        @Field("device_type") device_type: String,
+        @Field("token") token: String
+    ): Call<LoginResponse>
+
+}

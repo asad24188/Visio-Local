@@ -82,7 +82,7 @@
             android:textSize="@dimen/_13ssp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/project_recycler"
+            android:id="@+id/projectRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_project"
