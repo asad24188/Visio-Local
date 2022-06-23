@@ -1,6 +1,7 @@
 package com.visio.app.Auth
 
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,22 +10,37 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.widget.Toast
 import com.visio.app.DataModel.Login.LoginResponse
+import com.visio.app.DataModel.Login.User
 import com.visio.app.R
 import com.visio.app.Services.ApiClient
 import com.visio.app.databinding.ActivitySignUpBinding
+import com.wayprotect.app.utils.Utilities
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class SignUpActivity : AppCompatActivity() {
+
     lateinit var binding: ActivitySignUpBinding
+    private lateinit var utilities: Utilities
+    lateinit var context: Context
+    private lateinit var user: User
     private var passwordVisibile = false
     lateinit var progressDialog: ProgressDialog
+
     val apiClient: ApiClient = ApiClient()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        initt()
+        clicks()
+
+
+    }
+
+    private fun clicks() {
 
         binding.tvlogin.setOnClickListener {
             startActivity(
@@ -35,10 +51,27 @@ class SignUpActivity : AppCompatActivity() {
             )
         }
         binding.btnsignup.setOnClickListener {
+
             val email = binding.etEmail.text.toString()
             val password = binding.editPassword.text.toString()
             val confirm_pass = binding.editPassword2.text.toString()
-            signupApi( email, password, confirm_pass)
+
+            if (!email.isEmpty()){
+                if (!password.isEmpty()){
+                    if (password.equals(confirm_pass)){
+
+                        signupApi(email, password, confirm_pass)
+
+                    }else{
+                        utilities.makeToast(context,"Password not matched")
+                    }
+                }else{
+                    utilities.makeToast(context,"Enter Password")
+                }
+            }else{
+                utilities.makeToast(context,"Email is empty")
+            }
+
             showProgressDialog()
 
         }
@@ -51,6 +84,14 @@ class SignUpActivity : AppCompatActivity() {
             passwordVisibile = !passwordVisibile
             showPassword1(passwordVisibile)
         }
+
+    }
+
+    private fun initt() {
+
+        context = this
+        if (!::utilities.isInitialized) utilities = Utilities(this)
+
     }
 
     private fun showPassword(isShow: Boolean) {

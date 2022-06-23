@@ -35,6 +35,11 @@
         <entry key="..\:/Users/pc/AndroidStudioProjects/visio/app/src/main/res/layout/activity_sign_up.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/visio/app/src/main/res/layout/activity_signin.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/pc/AndroidStudioProjects/visio/app/src/main/res/layout/activity_verification.xml" value="0.20416666666666666" />
+        <entry key="app/src/main/res/drawable/button_bg.xml" value="0.1035" />
+        <entry key="app/src/main/res/layout/activity_camera.xml" value="0.15092592592592594" />
+        <entry key="app/src/main/res/layout/activity_collection.xml" value="0.18541666666666667" />
+        <entry key="app/src/main/res/layout/popup_withdraw.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/rcitem_btsheet.xml" value="0.335" />
       </map>
     </option>
   </component>

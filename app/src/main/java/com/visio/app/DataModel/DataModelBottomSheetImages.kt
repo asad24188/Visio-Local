@@ -1,5 +1,8 @@
 package com.example.visio.DataModel
 
+import android.net.Uri
+
 data class DataModelBottomSheetImages(
-    var image: Int
+    
+    var image: Uri
 )

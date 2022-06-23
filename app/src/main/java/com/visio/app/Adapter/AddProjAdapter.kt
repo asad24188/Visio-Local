@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.mtechsoft.compassapp.networking.Constants
 import com.visio.app.Activity.CollectionActivity
-import com.visio.app.DataModel.ProjectModel
+import com.visio.app.DataModel.projects.Project
 import com.visio.app.R
 
 class AddProjAdapter(
     val context: Context,
-    val listModel: ArrayList<ProjectModel>
+    val listModel: ArrayList<Project>
 ): RecyclerView.Adapter<AddProjAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
@@ -33,11 +34,14 @@ class AddProjAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val model: ProjectModel = listModel.get(position)
-        holder.name.text = model.name
-        holder.address.text = model.address
-        holder.date.text = model.Date
+        val model: Project = listModel.get(position)
+
+        holder.name.text = model.project_name
+        holder.address.text = "Pakistan"
+        holder.date.text = model.created_at
+
         holder.itemView.setOnClickListener {
+            Constants.PROJECT_ID = model.id.toString()
             context.startActivity(Intent(context, CollectionActivity::class.java))
         }
     }

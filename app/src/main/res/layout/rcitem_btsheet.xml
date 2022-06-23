@@ -20,6 +20,7 @@
             app:srcCompat="@drawable/ic_tree_image" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/deleteImage"
             android:layout_width="@dimen/_14sdp"
             android:layout_height="@dimen/_14sdp"
             android:layout_alignParentEnd="true"

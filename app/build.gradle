@@ -65,4 +65,7 @@ dependencies {
     implementation "androidx.camera:camera-view:1.0.0-alpha28"
     //OTPP
     implementation 'io.github.chaosleung:pinview:1.4.4'
+
+    //Permissions
+    implementation 'com.guolindev.permissionx:permissionx:1.6.1'
 }
