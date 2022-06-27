@@ -68,4 +68,13 @@ dependencies {
 
     //Permissions
     implementation 'com.guolindev.permissionx:permissionx:1.6.1'
+
+    // glide github
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //sensor
+    implementation 'org.apache.commons:commons-csv:1.4'
+    implementation 'com.github.KalebKE:FSensor:v2.1'
+
 }

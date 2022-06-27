@@ -3,19 +3,23 @@ package com.visio.app.Activity
 import android.Manifest
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mtechsoft.compassapp.networking.Constants
 import com.permissionx.guolindev.PermissionX
 import com.visio.app.Adapter.AddProjAdapter
+import com.visio.app.Auth.SigninActivity
 import com.visio.app.DataModel.BaseResponse
 import com.visio.app.DataModel.projects.Project
 import com.visio.app.DataModel.projects.ProjectsResponse
@@ -96,9 +100,61 @@ class HomeActivity : AppCompatActivity() {
     private fun clicks() {
 
         binding.btnAddproj.setOnClickListener {
-
             popupwuthdraw()
         }
+
+        binding.logout.setOnClickListener {
+
+            utilities.clearSharedPref(context)
+            startActivity(Intent(applicationContext, SigninActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+        }
+
+        binding.iconDelete.setOnClickListener {
+
+            val s: String = TextUtils.join(",", Constants.strings)
+            if (!s.isEmpty()){
+
+                deleteProject(s)
+
+            }else{
+                utilities.makeToast(context,"Please select project")
+            }
+
+
+        }
+    }
+
+    private fun deleteProject(pIds: String) {
+
+        var url = "delete-project/"+pIds
+        utilities.showProgressDialog(context,"Deleting ...")
+        val apiClient = ApiClient()
+        apiClient.getApiService().deleteProject(url)
+            .enqueue(object : Callback<BaseResponse> {
+                override fun onResponse(call: Call<BaseResponse>, response: Response<BaseResponse>) {
+
+                    utilities.hideProgressDialog()
+                    if (response.isSuccessful) {
+
+                        getProjects()
+                        Constants.strings.clear()
+
+                    } else {
+
+                        utilities.hideProgressDialog()
+                        utilities.makeToast(context,response.body()!!.message)
+                    }
+                }
+                override fun onFailure(call: Call<BaseResponse>, t: Throwable) {
+
+                    utilities.hideProgressDialog()
+                    utilities.makeToast(context,t.message.toString())
+
+                }
+            })
     }
 
     private fun popupwuthdraw() {

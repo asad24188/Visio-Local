@@ -62,4 +62,10 @@ interface ApiServices {
     @GET
     fun projectDetail(@Url url: String): Call<ProjectDetailResponse>
 
+    @GET
+    fun deleteProject(@Url url: String): Call<BaseResponse>
+
+    @GET
+    fun deleteCollection(@Url url: String): Call<BaseResponse>
+
 }

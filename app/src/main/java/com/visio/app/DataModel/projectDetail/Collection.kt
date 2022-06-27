@@ -12,6 +12,7 @@ data class Collection(
     var latitude: String,
     var longitude: String,
     var collection_image: String,
+    var checked: Boolean = false,
     var collection_images: ArrayList<CollectionImages>,
 
 )

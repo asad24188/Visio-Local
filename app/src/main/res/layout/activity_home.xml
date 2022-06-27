@@ -15,11 +15,28 @@
         android:layout_marginVertical="@dimen/_17sdp">
 
         <RelativeLayout
+            android:id="@+id/logout"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_37sdp"
+            android:layout_centerVertical="true"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logout"
+                app:tint="@color/white" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/icon_drawer"
-            android:visibility="gone"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -35,7 +52,7 @@
             android:layout_width="@dimen/_35sdp"
             android:layout_height="@dimen/_37sdp"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@id/icon_upload">
+            android:layout_alignParentEnd="true">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -51,7 +68,8 @@
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="match_parent"

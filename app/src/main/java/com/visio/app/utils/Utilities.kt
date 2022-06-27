@@ -28,6 +28,8 @@ class Utilities(context: Context) {
 
     private val context: Context? = null
     var dialog: ProgressDialog? = null
+    var strings: List<String> = ArrayList()
+
 
     fun makeToast(ctx: Context?, msg: String?) {
         Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show()

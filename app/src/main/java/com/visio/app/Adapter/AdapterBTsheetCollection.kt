@@ -9,10 +9,14 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.visio.DataModel.CollectionBTsheetDataModel
+import com.mtechsoft.compassapp.networking.Constants
+import com.visio.app.DataModel.projectDetail.Collection
 import com.visio.app.R
 
-class AdapterBTsheetCollection(val context: Context, val list: ArrayList<CollectionBTsheetDataModel>) :
+class AdapterBTsheetCollection(val context: Context, val list: ArrayList<Collection>) :
     RecyclerView.Adapter<AdapterBTsheetCollection.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -25,17 +29,17 @@ class AdapterBTsheetCollection(val context: Context, val list: ArrayList<Collect
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(context).inflate(R.layout.item_collection_btsheet, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_collection_btsheet, parent, false)
         return AdapterBTsheetCollection.ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val model: CollectionBTsheetDataModel = list.get(position)
-        holder.name.text = model.name
-        holder.id1.text = model.id1
-        holder.id2.text = model.id2
-        holder.id3.text = model.id3
+        val model: Collection = list.get(position)
+        holder.name.text = model.collection_name
+        holder.id1.text = model.card_id1
+        holder.id2.text = model.card_id2
+        holder.id3.text = model.card_id3
+
     }
 
     override fun getItemCount(): Int {

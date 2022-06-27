@@ -18,12 +18,13 @@
             android:layout_marginHorizontal="@dimen/_6sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:visibility="visible"
-            android:weightSum="5">
+            android:weightSum="5"
+            >
 
             <TextView
-                android:id="@+id/tv_dimension"
+                android:id="@+id/label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -31,6 +32,109 @@
                 android:text="123O SW | 123O"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11ssp" />
+
+            <RelativeLayout
+                android:id="@+id/layout_calibrated_statistics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" >
+
+                    <TableLayout
+                        android:id="@+id/table_calibrated_statistics_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TableRow
+                            android:id="@+id/table_calibrated_statistics_left_row_0"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="2dip" >
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="20dp"
+                                android:layout_weight="1" >
+
+                                <TextView
+                                    android:id="@+id/label_x_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="@string/label_x_axis"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                <TextView
+                                    android:id="@+id/value_x_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/label_x_axis_calibrated"
+                                    android:text="@string/value_default"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                >
+
+                                <TextView
+                                    android:id="@+id/label_y_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="@string/label_y_axis"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                <TextView
+                                    android:id="@+id/value_y_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/label_y_axis_calibrated"
+                                    android:text="@string/value_default"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="1" >
+
+                                <TextView
+                                    android:id="@+id/label_z_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="@string/label_z_axis"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                <TextView
+                                    android:id="@+id/value_z_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/label_z_axis_calibrated"
+                                    android:text="@string/value_default"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                            </RelativeLayout>
+                        </TableRow>
+                    </TableLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
 
             <!--            <RelativeLayout-->
             <!--                android:id="@+id/icon_drawer"-->
@@ -313,7 +417,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="@string/id_2"
+                        android:text="@string/id_3"
                         android:textColor="@color/swan_clr"/>
 
                     <EditText

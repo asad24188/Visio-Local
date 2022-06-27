@@ -38,6 +38,12 @@
         <entry key="app/src/main/res/drawable/button_bg.xml" value="0.1035" />
         <entry key="app/src/main/res/layout/activity_camera.xml" value="0.15092592592592594" />
         <entry key="app/src/main/res/layout/activity_collection.xml" value="0.18541666666666667" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.18541666666666667" />
+        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_signin.xml" value="0.18541666666666667" />
+        <entry key="app/src/main/res/layout/item_collection_btsheet.xml" value="0.18541666666666667" />
+        <entry key="app/src/main/res/layout/item_collection_map.xml" value="0.18541666666666667" />
+        <entry key="app/src/main/res/layout/item_project.xml" value="0.18541666666666667" />
         <entry key="app/src/main/res/layout/popup_withdraw.xml" value="0.25" />
         <entry key="app/src/main/res/layout/rcitem_btsheet.xml" value="0.335" />
       </map>

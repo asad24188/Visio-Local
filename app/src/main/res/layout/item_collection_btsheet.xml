@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/_120sdp"
+    android:layout_width="wrap_content"
     android:layout_height="@dimen/_85sdp"
     android:background="@drawable/collection_item_bg"
-    android:layout_marginVertical="@dimen/_6sdp">
+    android:layout_marginVertical="@dimen/_6sdp"
+    android:layout_marginEnd="@dimen/_8sdp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingHorizontal="@dimen/_13sdp"
         android:paddingTop="@dimen/_8sdp"

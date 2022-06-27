@@ -2,11 +2,17 @@ package com.visio.app.Activity
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
@@ -16,19 +22,27 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.visio.Adapter.AdapterBTsheetCollection
 import com.example.visio.Adapter.AdapterBTsheetImages
-import com.example.visio.DataModel.CollectionBTsheetDataModel
 import com.example.visio.DataModel.DataModelBottomSheetImages
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.gson.Gson
+import com.kircherelectronics.fsensor.filter.averaging.MeanFilter
+import com.kircherelectronics.fsensor.observer.SensorSubject
+import com.kircherelectronics.fsensor.sensor.FSensor
+import com.kircherelectronics.fsensor.sensor.gyroscope.GyroscopeSensor
 import com.mtechsoft.compassapp.networking.Constants
 import com.visio.app.DataModel.BaseResponse
+import com.visio.app.DataModel.projectDetail.Collection
+import com.visio.app.DataModel.projectDetail.ProjectDetailResponse
 import com.visio.app.R
+import com.visio.app.Sensor.datalogger.DataLoggerManager
 import com.visio.app.Services.ApiClient
 import com.visio.app.databinding.ActivityCameraBinding
+import com.visio.app.utils.Compass
 import com.visio.app.utils.GPSTracker
+import com.visio.app.utils.SOWTFormatter
 import com.wayprotect.app.utils.Utilities
 import kotlinx.android.synthetic.main.activity_camera.*
 import okhttp3.MediaType
@@ -46,22 +60,54 @@ import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListener {
 
-    lateinit var binding: ActivityCameraBinding
+    private lateinit var binding: ActivityCameraBinding
+    private lateinit var context: Context
     private lateinit var utilities: Utilities
-    lateinit var context: Context
-
-    private var btbehavior: BottomSheetBehavior<*>?=null
-
     private lateinit var adapter: AdapterBTsheetImages
     private lateinit var list: ArrayList<DataModelBottomSheetImages>
     private lateinit var adapterGrid: AdapterBTsheetCollection
-    private lateinit var listGrid: ArrayList<CollectionBTsheetDataModel>
-
-    private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory : File
     private lateinit var cameraExecutor : ExecutorService
-    var imageFiles = ArrayList<File>()
-    var multiImages: ArrayList<MultipartBody.Part> = ArrayList()
+    private lateinit var previousCollections: ArrayList<Collection>
+
+    private var btbehavior: BottomSheetBehavior<*>?=null
+    private var imageCapture: ImageCapture? = null
+    private var imageFiles = ArrayList<File>()
+    private var multiImages: ArrayList<MultipartBody.Part> = ArrayList()
+
+    //compass work
+    private val TAG: String? = "MainActivity"
+    private var compass: Compass? = null
+    private val dial: ImageView? = null
+    private val hand: ImageView? = null
+    private val label: TextView? = null
+    private val currentAzimuth = 0f
+    private val longitude: TextView? = null
+    private  var latitude:TextView? = null
+    private var locationManager: LocationManager? = null
+    private var sowtFormatter: SOWTFormatter? = null
+
+
+    //sensor work
+    // Indicate if the output should be logged to a .csv file
+    private val logData = false
+    private var meanFilterEnabled = false
+    private var fusedOrientation = FloatArray(3)
+
+    // Handler for the UI plots so everything plots smoothly
+    protected var uiHandler: Handler? = null
+    protected var uiRunnable: Runnable? = null
+    private var tvXAxis: TextView? = null
+    private var tvYAxis: TextView? = null
+    private var tvZAxis: TextView? = null
+    private var sensorValue: TextView? = null
+    private var fSensor: FSensor? = null
+    private var meanFilter: MeanFilter? = null
+    private var dataLogger: DataLoggerManager? = null
+
+    private val sensorObserver =
+        SensorSubject.SensorObserver { values -> updateValues(values) }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,9 +118,34 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         initt()
         clicks()
 
+        locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        val location = locationManager!!.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        onLocationChanged(location!!)
+        setupCompass()
+
+
+        dataLogger = DataLoggerManager(this)
+        meanFilter = MeanFilter()
+
+        uiHandler = Handler()
+        uiRunnable = object : Runnable {
+            override fun run() {
+                uiHandler!!.postDelayed(this, 100)
+                updateText()
+            }
+        }
+
+
+
         //CameraX
-        if(allPermissionsGranted()){
-            startCamera()
+        if(allPermissionsGranted()){ startCamera()
         }else{
             ActivityCompat.requestPermissions(this,REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
@@ -82,60 +153,10 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         //Setup the listener for take photo button
 
         outputDirectory = getOutputDirectory()
-
         cameraExecutor = Executors.newSingleThreadExecutor()
-
-
         list = ArrayList()
-
-
-
-        binding.recycler.setLayoutManager(
-            LinearLayoutManager(
-                this,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-        )
-
-        listGrid = ArrayList()
-        listGrid.add(
-            CollectionBTsheetDataModel(
-                "Collection 1",
-                "123",
-                "345",
-                "789"
-            )
-        )
-        listGrid.add(
-            CollectionBTsheetDataModel(
-                "Collection 1",
-                "123",
-                "345",
-                "789"
-            )
-        )
-        listGrid.add(
-            CollectionBTsheetDataModel(
-                "Collection 1",
-                "123",
-                "345",
-                "789"
-            )
-        )
-        listGrid.add(
-            CollectionBTsheetDataModel(
-                "Collection 1",
-                "123",
-                "345",
-                "789"
-            )
-        )
-
-//, GridLayoutManager.HORIZONTAL, false
-        binding.recyclergrid.layoutManager = GridLayoutManager(this, 2)
-        adapterGrid = AdapterBTsheetCollection(this, listGrid)
-        binding.recyclergrid.adapter = adapterGrid
+        previousCollections = ArrayList()
+        setPrevoiusCollections()
 
         btbehavior = BottomSheetBehavior.from(binding.btsheet)
 
@@ -167,6 +188,106 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
         })
+    }
+
+
+    private fun updateText() {
+        binding.valueXAxisCalibrated!!.text = java.lang.String.format(
+            Locale.getDefault(), "%.0f", (Math.toDegrees(
+                fusedOrientation[1].toDouble()
+            ) + 360) % 360
+        )
+        binding.valueYAxisCalibrated!!.text = java.lang.String.format(
+            Locale.getDefault(), "%.0f", (Math.toDegrees(
+                fusedOrientation[2].toDouble()
+            ) + 360) % 360
+        )
+        binding.valueZAxisCalibrated!!.text = java.lang.String.format(
+            Locale.getDefault(), "%.0f", (Math.toDegrees(
+                fusedOrientation[0].toDouble()
+            ) + 360) % 360
+        )
+    }
+
+    fun onLocationChanged(location: Location) {
+        val longitude = location.longitude
+        val lattitude = location.latitude
+        binding.btnGps.text = String.format("%s", lattitude)+"/"+String.format("%s", longitude)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "start compass")
+        setupCompass()
+        compass!!.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        compass!!.stop()
+
+        fSensor!!.unregister(sensorObserver)
+        fSensor!!.stop()
+        uiHandler!!.removeCallbacksAndMessages(null)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupCompass()
+        compass!!.start()
+
+        //
+
+        val mode: Mode = readPrefs()
+        when (mode) {
+            Mode.GYROSCOPE_ONLY -> fSensor =
+                GyroscopeSensor(this)
+        }
+        fSensor!!.register(sensorObserver)
+        fSensor!!.start()
+        uiHandler!!.post(uiRunnable!!)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "stop compass")
+        compass!!.stop()
+    }
+
+    private fun setupCompass() {
+        compass = Compass(this)
+        val cl: Compass.CompassListener = getCompassListener()
+        compass!!.setListener(cl)
+    }
+
+    private fun getCompassListener(): Compass.CompassListener {
+        return object : Compass.CompassListener {
+            override fun onNewAzimuth(azimuth: Float) {
+                runOnUiThread {
+                    adjustSotwLabel(azimuth)
+                }
+            }
+        }
+    }
+
+    private fun adjustSotwLabel(azimuth: Float) {
+        binding.label!!.text = sowtFormatter!!.format(azimuth)
+    }
+
+    private fun setPrevoiusCollections() {
+
+
+        val gsonn = Gson()
+        val sharedPref = context.getSharedPreferences("visioshared", Context.MODE_PRIVATE)
+        val jsonn: String =  sharedPref.getString("pDetail", "").toString()
+        val obj: ProjectDetailResponse = gsonn.fromJson(jsonn, ProjectDetailResponse::class.java)
+        previousCollections = obj.data
+
+        binding.recyclergrid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        adapterGrid = AdapterBTsheetCollection(this, previousCollections)
+        binding.recyclergrid.adapter = adapterGrid
+
     }
 
     private fun clicks() {
@@ -214,6 +335,10 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
 
         }
 
+        binding.btnNext.setOnClickListener {
+            startActivity(Intent(this,CameraActivity::class.java))
+            finish()
+        }
     }
 
     private fun callApi(
@@ -275,7 +400,7 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         context = this
         if (!::utilities.isInitialized) utilities = Utilities(this)
         imageFiles = ArrayList()
-
+        sowtFormatter = SOWTFormatter(context)
     }
 
 
@@ -324,6 +449,7 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
     private fun addImage(savedUri: Uri?) {
 
         list.add(DataModelBottomSheetImages(savedUri!!))
+        binding.recycler.setLayoutManager(LinearLayoutManager( this, LinearLayoutManager.HORIZONTAL, false))
         adapter = AdapterBTsheetImages(this@CameraActivity, list,this@CameraActivity)
         binding.recycler.adapter = adapter
     }
@@ -420,6 +546,27 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         imageFiles.removeAt(position)
         Log.d("files",imageFiles.size.toString())
         Log.d("files",list.size.toString())
+    }
+
+
+    private fun updateValues(values: FloatArray) {
+        fusedOrientation = values
+        if (meanFilterEnabled) {
+            fusedOrientation = meanFilter!!.filter(fusedOrientation)
+        }
+        if (logData) {
+            dataLogger!!.setRotation(fusedOrientation)
+        }
+    }
+
+    private enum class Mode {
+        GYROSCOPE_ONLY, COMPLIMENTARY_FILTER, KALMAN_FILTER
+    }
+
+    private fun readPrefs(): Mode {
+
+        val mode: Mode = Mode.GYROSCOPE_ONLY
+        return mode
     }
 
 }

@@ -21,6 +21,25 @@
     <string name="log_gps">Log GPS</string>
     <string name="next">Next</string>
     <string name="id_2">ID 2</string>
+    <string name="id_3">ID 3</string>
+
+    <string name="sotw_north">N</string>
+    <string name="sotw_east">E</string>
+    <string name="sotw_south">S</string>
+    <string name="sotw_west">W</string>
+    <string name="sotw_northeast">NE</string>
+    <string name="sotw_northwest">NW</string>
+    <string name="sotw_southeast">SE</string>
+    <string name="sotw_southwest">SW</string>
+    <string name="akshita_compass">AKSHITA COMPASS</string>
+    <string name="longitude">Longitude:</string>
+    <string name="latitude">Latitude:</string>
+
+    <string name="label_x_axis">X-Axis:</string>
+    <string name="label_y_axis">Y-Axis:</string>
+    <string name="label_z_axis">Z-Axis:</string>
+    <string name="value_default">0.0</string>
+
 
     //shapable image corner
 
