@@ -33,108 +33,6 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_11ssp" />
 
-            <RelativeLayout
-                android:id="@+id/layout_calibrated_statistics"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                >
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true" >
-
-                    <TableLayout
-                        android:id="@+id/table_calibrated_statistics_left"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
-
-                        <TableRow
-                            android:id="@+id/table_calibrated_statistics_left_row_0"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="2dip" >
-
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="20dp"
-                                android:layout_weight="1" >
-
-                                <TextView
-                                    android:id="@+id/label_x_axis_calibrated"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:text="@string/label_x_axis"
-                                    android:textColor="@color/white"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                                <TextView
-                                    android:id="@+id/value_x_axis_calibrated"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_toRightOf="@+id/label_x_axis_calibrated"
-                                    android:text="@string/value_default"
-                                    android:textColor="@color/white"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                >
-
-                                <TextView
-                                    android:id="@+id/label_y_axis_calibrated"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:text="@string/label_y_axis"
-                                    android:textColor="@color/white"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                                <TextView
-                                    android:id="@+id/value_y_axis_calibrated"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_toRightOf="@+id/label_y_axis_calibrated"
-                                    android:text="@string/value_default"
-                                    android:textColor="@color/white"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                            </RelativeLayout>
-
-                            <RelativeLayout
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_weight="1" >
-
-                                <TextView
-                                    android:id="@+id/label_z_axis_calibrated"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:text="@string/label_z_axis"
-                                    android:textColor="@color/white"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                                <TextView
-                                    android:id="@+id/value_z_axis_calibrated"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_toRightOf="@+id/label_z_axis_calibrated"
-                                    android:text="@string/value_default"
-                                    android:textColor="@color/white"
-                                    android:textAppearance="?android:attr/textAppearanceMedium" />
-                            </RelativeLayout>
-                        </TableRow>
-                    </TableLayout>
-                </RelativeLayout>
-            </RelativeLayout>
-
 
             <!--            <RelativeLayout-->
             <!--                android:id="@+id/icon_drawer"-->
@@ -225,6 +123,25 @@
             android:background="@color/black_tranparent"
             android:elevation="2dp">
 
+            <LinearLayout
+                android:id="@+id/locationLin"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/_10sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:src="@drawable/black_marker"
+                    app:tint="@color/white" />
+
+            </LinearLayout>
+
+
+
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/ButtonCameraClick"
                 android:layout_width="@dimen/_75sdp"
@@ -250,6 +167,7 @@
         android:background="@color/dark_clr"
         app:behavior_peekHeight="64dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+
         >
 
         <androidx.core.widget.NestedScrollView
@@ -503,17 +421,127 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp" />
 
-            <TextView
-                android:id="@+id/btn_gps"
+
+            <RelativeLayout
+                android:id="@+id/layout_calibrated_statistics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:fontFamily="@font/poppins_regular"
-                android:padding="@dimen/_8sdp"
-                android:text="@string/log_gps"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12ssp" />
+                android:visibility="visible"
+                android:layout_centerInParent="true"
+                >
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" >
+
+                    <TableLayout
+                        android:id="@+id/table_calibrated_statistics_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TableRow
+                            android:id="@+id/table_calibrated_statistics_left_row_0"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="2dip" >
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="20dp"
+                                android:layout_weight="1" >
+
+                                <TextView
+                                    android:id="@+id/label_x_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="@string/label_x_axis"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textColor="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/value_x_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/label_x_axis_calibrated"
+                                    android:text="@string/value_default"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                >
+
+                                <TextView
+                                    android:id="@+id/label_y_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="@string/label_y_axis"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textColor="@color/white" />
+
+                                <TextView
+                                    android:id="@+id/value_y_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/label_y_axis_calibrated"
+                                    android:text="@string/value_default"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_weight="1" >
+
+                                <TextView
+                                    android:id="@+id/label_z_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="@string/label_z_axis"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                                <TextView
+                                    android:id="@+id/value_z_axis_calibrated"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/label_z_axis_calibrated"
+                                    android:text="@string/value_default"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:textColor="@color/white"
+                                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                            </RelativeLayout>
+                        </TableRow>
+                    </TableLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+            <!--            <TextView-->
+<!--                android:id="@+id/btn_gps"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:fontFamily="@font/poppins_regular"-->
+<!--                android:padding="@dimen/_8sdp"-->
+<!--                android:text="@string/log_gps"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="@dimen/_12ssp" />-->
 
             <TextView
                 android:id="@+id/btn_next"

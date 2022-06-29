@@ -108,7 +108,8 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
     private val sensorObserver =
         SensorSubject.SensorObserver { values -> updateValues(values) }
 
-
+    var lat = 0.0
+    var lng = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -210,9 +211,9 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
     }
 
     fun onLocationChanged(location: Location) {
-        val longitude = location.longitude
-        val lattitude = location.latitude
-        binding.btnGps.text = String.format("%s", lattitude)+"/"+String.format("%s", longitude)
+        lat = location.latitude
+        lng = location.longitude
+//        binding.btnGps.text = String.format("%s", lattitude)+"/"+String.format("%s", longitude)
 
     }
 
@@ -292,13 +293,26 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
 
     private fun clicks() {
 
+
+
         binding.ButtonCameraClick.setOnClickListener {
             takePhoto()
+        }
+
+        binding.locationLin.setOnClickListener {
+
+            val gpsTracker = GPSTracker(context)
+            val lat = gpsTracker.latitude.toString()
+            val lng = gpsTracker.longitude.toString()
+
+            utilities.makeToast(context,lat+"/"+lng)
+
         }
 
         binding.btnDone.setOnClickListener {
 
 
+            var action = "done"
             var projectId = Constants.PROJECT_ID
             Log.d("proId",projectId.toString())
 
@@ -314,7 +328,7 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                         if (!id3.isEmpty()){
                             if (imageCount > 0){
 
-                                callApi(projectId,collectionName,id1,id2,id3)
+                                callApi(projectId,collectionName,id1,id2,id3,action)
 
                             }else{
                                 utilities.makeToast(context,"Please upload images")
@@ -332,12 +346,44 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                 utilities.makeToast(context,"Enter collection name")
             }
 
-
         }
 
         binding.btnNext.setOnClickListener {
-            startActivity(Intent(this,CameraActivity::class.java))
-            finish()
+
+
+            var action = "next"
+            var projectId = Constants.PROJECT_ID
+            Log.d("proId",projectId.toString())
+
+            var collectionName = binding.edtName.text.toString()
+            var id1 = binding.edtId1.text.toString()
+            var id2 = binding.edtId2.text.toString()
+            var id3 = binding.edtId3.text.toString()
+            var imageCount = imageFiles.size
+
+            if (!collectionName.isEmpty()){
+                if (!id1.isEmpty()){
+                    if (!id2.isEmpty()){
+                        if (!id3.isEmpty()){
+                            if (imageCount > 0){
+
+                                callApi(projectId,collectionName,id1,id2,id3,action)
+
+                            }else{
+                                utilities.makeToast(context,"Please upload images")
+                            }
+                        }else{
+                            utilities.makeToast(context,"ID3 empty")
+                        }
+                    }else{
+                        utilities.makeToast(context,"ID2 empty")
+                    }
+                }else{
+                    utilities.makeToast(context,"ID1 empty")
+                }
+            }else{
+                utilities.makeToast(context,"Enter collection name")
+            }
         }
     }
 
@@ -346,7 +392,8 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         collectionName: String,
         id1: String,
         id2: String,
-        id3: String
+        id3: String,
+        action: String
     ) {
 
         val gpsTracker = GPSTracker(context)
@@ -376,7 +423,13 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                     if (response.isSuccessful) {
 
                         utilities.makeToast(context,response.body()!!.message)
-                        finish()
+                        if (action.equals("done")){
+                            finish()
+                        }else{
+
+                            startActivity(Intent(context,CameraActivity::class.java))
+                            finish()
+                        }
 
                     } else {
 
@@ -431,14 +484,12 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                     val savedUri = Uri.fromFile(photoFile)
                     val msg = "Photo captured succeeded: $savedUri"
 
-                    btbehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+//                    btbehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
                     addImage(savedUri)
                     binding.ButtonCameraClick.isEnabled = true
                     imageFiles.add(photoFile)
 
-
-
-                    Toast.makeText(baseContext,msg, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(baseContext,msg, Toast.LENGTH_SHORT).show()
 
                     Log.d(TAG, msg)
                 }
