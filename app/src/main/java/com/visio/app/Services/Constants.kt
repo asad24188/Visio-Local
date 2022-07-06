@@ -1,5 +1,8 @@
 package com.mtechsoft.compassapp.networking
 
+import com.fed.fedsense.RoomDB.LocalCollection
+import com.fed.fedsense.RoomDB.LocalProject
+
 
 object Constants {
 
@@ -13,6 +16,8 @@ object Constants {
     var SELECTION_MODE_ON = false
     var strings: ArrayList<String> = ArrayList()
     var collections: ArrayList<String> = ArrayList()
+    var localProjects: ArrayList<LocalProject> = ArrayList()
+    var localCollections: ArrayList<LocalCollection> = ArrayList()
 
 
 }

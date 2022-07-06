@@ -23,9 +23,13 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import com.example.visio.Adapter.AdapterBTsheetCollection
 import com.example.visio.Adapter.AdapterBTsheetImages
+import com.example.visio.Adapter.PreviousCollectionsAdapter
 import com.example.visio.DataModel.DataModelBottomSheetImages
+import com.fed.fedsense.RoomDB.LocalCollection
+import com.fed.fedsense.RoomDB.MyAppDataBase
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.Gson
 import com.kircherelectronics.fsensor.filter.averaging.MeanFilter
@@ -33,6 +37,7 @@ import com.kircherelectronics.fsensor.observer.SensorSubject
 import com.kircherelectronics.fsensor.sensor.FSensor
 import com.kircherelectronics.fsensor.sensor.gyroscope.GyroscopeSensor
 import com.mtechsoft.compassapp.networking.Constants
+import com.visio.app.Adapter.LocalCollectionsAdapter
 import com.visio.app.DataModel.BaseResponse
 import com.visio.app.DataModel.projectDetail.Collection
 import com.visio.app.DataModel.projectDetail.ProjectDetailResponse
@@ -51,7 +56,9 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -66,9 +73,11 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
     private lateinit var adapter: AdapterBTsheetImages
     private lateinit var list: ArrayList<DataModelBottomSheetImages>
     private lateinit var adapterGrid: AdapterBTsheetCollection
+    private lateinit var previousAdapter: PreviousCollectionsAdapter
     private lateinit var outputDirectory : File
     private lateinit var cameraExecutor : ExecutorService
     private lateinit var previousCollections: ArrayList<Collection>
+    private lateinit var previousLocalCollections: List<LocalCollection>
 
     private var btbehavior: BottomSheetBehavior<*>?=null
     private var imageCapture: ImageCapture? = null
@@ -110,6 +119,10 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
 
     var lat = 0.0
     var lng = 0.0
+    var imagePath = ""
+
+    private lateinit var myAppDatabase: MyAppDataBase
+    lateinit var byteImage: ByteArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,7 +170,12 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         cameraExecutor = Executors.newSingleThreadExecutor()
         list = ArrayList()
         previousCollections = ArrayList()
-        setPrevoiusCollections()
+        previousLocalCollections = ArrayList()
+
+        //local work
+         getpreviousCollections()
+        //api work
+//        setPrevoiusCollections()
 
         btbehavior = BottomSheetBehavior.from(binding.btsheet)
 
@@ -276,8 +294,20 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         binding.label!!.text = sowtFormatter!!.format(azimuth)
     }
 
-    private fun setPrevoiusCollections() {
+    private fun getpreviousCollections() {
 
+        previousLocalCollections = java.util.ArrayList()
+        var projectId = Constants.PROJECT_ID.toInt()
+        previousLocalCollections = myAppDatabase.collectionDao().loadAllCollections(projectId)
+
+        binding.recyclergrid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        previousAdapter = PreviousCollectionsAdapter(this, previousLocalCollections)
+        binding.recyclergrid.adapter = previousAdapter
+
+
+    }
+
+    private fun setPrevoiusCollections() {
 
         val gsonn = Gson()
         val sharedPref = context.getSharedPreferences("visioshared", Context.MODE_PRIVATE)
@@ -328,7 +358,11 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                         if (!id3.isEmpty()){
                             if (imageCount > 0){
 
-                                callApi(projectId,collectionName,id1,id2,id3,action)
+                                //local work
+                                addLocalCollection(projectId, collectionName, id1, id2, id3, action)
+
+                                //api work
+//                                callApi(projectId,collectionName,id1,id2,id3,action)
 
                             }else{
                                 utilities.makeToast(context,"Please upload images")
@@ -367,7 +401,11 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                         if (!id3.isEmpty()){
                             if (imageCount > 0){
 
-                                callApi(projectId,collectionName,id1,id2,id3,action)
+                                //local work
+                                addLocalCollection(projectId,collectionName,id1,id2,id3,action)
+
+                                //api work
+//                                callApi(projectId,collectionName,id1,id2,id3,action)
 
                             }else{
                                 utilities.makeToast(context,"Please upload images")
@@ -385,6 +423,47 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                 utilities.makeToast(context,"Enter collection name")
             }
         }
+    }
+
+    private fun addLocalCollection(
+        projectId: String,
+        collectionName: String,
+        id1: String,
+        id2: String,
+        id3: String,
+        action: String
+    ) {
+
+        val gpsTracker = GPSTracker(context)
+        if (gpsTracker.canGetLocation()){
+
+            lat = gpsTracker.latitude
+            lng = gpsTracker.longitude
+
+        }else{
+
+            lat = 0.0
+            lng = 0.0
+        }
+
+
+        val r = Random()
+        val id = r.nextInt(100000 - 1) + 1
+        Log.d("iddd",id.toString())
+
+
+
+        val collection = LocalCollection(id,projectId,collectionName,id1,id2,id3,lat.toString(),lng.toString(),false,imagePath)
+        myAppDatabase.collectionDao().addCollection(collection)
+        utilities.makeToast(context,"added")
+        if (action.equals("done")){
+            finish()
+        }else{
+
+            startActivity(Intent(context,CameraActivity::class.java))
+            finish()
+        }
+
     }
 
     private fun callApi(
@@ -454,6 +533,8 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         if (!::utilities.isInitialized) utilities = Utilities(this)
         imageFiles = ArrayList()
         sowtFormatter = SOWTFormatter(context)
+        myAppDatabase = Room.databaseBuilder(this, MyAppDataBase::class.java, "VISIODB").allowMainThreadQueries().build()
+
     }
 
 
@@ -466,9 +547,9 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
 
         //create time-stamped output file to hold the image
 
-        val photoFile = File(outputDirectory, SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())+ ".jpg")
+        val photoFile = File(outputDirectory,SimpleDateFormat(FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis())+ ".jpg")
 
-        //create output options object which contains file + metadata
+
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
@@ -488,13 +569,29 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                     addImage(savedUri)
                     binding.ButtonCameraClick.isEnabled = true
                     imageFiles.add(photoFile)
+                    Log.d("path",photoFile.path.toString())
+                    imagePath = photoFile.path.toString()
 
-//                    Toast.makeText(baseContext,msg, Toast.LENGTH_SHORT).show()
+
+//                    val iStream: InputStream? = contentResolver.openInputStream(savedUri)
+//                    byteImage = getBytes(iStream!!)!!
 
                     Log.d(TAG, msg)
                 }
             })
 
+    }
+
+
+    fun getBytes(inputStream: InputStream): ByteArray? {
+        val byteBuffer = ByteArrayOutputStream()
+        val bufferSize = 1024
+        val buffer = ByteArray(bufferSize)
+        var len = 0
+        while (inputStream.read(buffer).also { len = it } != -1) {
+            byteBuffer.write(buffer, 0, len)
+        }
+        return byteBuffer.toByteArray()
     }
 
     private fun addImage(savedUri: Uri?) {
@@ -550,6 +647,17 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
     fun getOutputDirectory():File{
         val mediaDir = externalMediaDirs.firstOrNull()?.let {
             File(it,resources.getString(R.string.app_name)).apply {
+                mkdirs()
+            }
+        }
+        return  if (mediaDir != null && mediaDir.exists()) {
+            mediaDir
+        } else filesDir
+    }
+
+    fun getProjectDirectory():File{
+        val mediaDir = resources.getString(R.string.app_name).let {
+            File(it,"Project").apply {
                 mkdirs()
             }
         }

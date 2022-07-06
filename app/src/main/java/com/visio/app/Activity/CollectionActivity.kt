@@ -14,6 +14,10 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
+import com.fed.fedsense.RoomDB.LocalCollection
+import com.fed.fedsense.RoomDB.LocalProject
+import com.fed.fedsense.RoomDB.MyAppDataBase
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -27,6 +31,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import com.mtechsoft.compassapp.networking.Constants
 import com.visio.app.Adapter.AdapterCollectionMap
+import com.visio.app.Adapter.LocalCollectionsAdapter
+import com.visio.app.Adapter.LocalProjectsAdapter
 import com.visio.app.DataModel.BaseResponse
 import com.visio.app.DataModel.projectDetail.Collection
 import com.visio.app.DataModel.projectDetail.ProjectDetailResponse
@@ -51,10 +57,16 @@ class CollectionActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.On
     private lateinit var lastLocation: Location
     private lateinit var fusedlocationclient: FusedLocationProviderClient
     private lateinit var adapter: AdapterCollectionMap
+    private lateinit var localAdapter: LocalCollectionsAdapter
     private lateinit var collections: ArrayList<Collection>
+    var localCollections: List<LocalCollection> = java.util.ArrayList()
+
     companion object {
         private const val LOCATION_REQUEST_CODE = 1
     }
+
+    private lateinit var myAppDatabase: MyAppDataBase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCollectionBinding.inflate(layoutInflater)
@@ -79,10 +91,41 @@ class CollectionActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.On
 
     override fun onResume() {
         super.onResume()
-        getProjectDetail()
+
+        //local work
+        getLocalProjectDetail()
+
+        //api work
+//        getProjectDetail()
 
     }
 
+    private fun getLocalProjectDetail() {
+
+        localCollections = java.util.ArrayList()
+        var projectId = Constants.PROJECT_ID.toInt()
+        localCollections = myAppDatabase.collectionDao().loadAllCollections(projectId)
+
+        binding.collectionRecycler.setLayoutManager(LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false))
+        localAdapter = LocalCollectionsAdapter(context, localCollections)
+        binding.collectionRecycler.adapter = localAdapter
+
+
+    }
+
+    private fun getLocalProjectDetailafterDelete() {
+
+        localCollections = java.util.ArrayList()
+        var projectId = Constants.PROJECT_ID.toInt()
+        localCollections = myAppDatabase.collectionDao().loadAllCollections(projectId)
+
+        binding.collectionRecycler.setLayoutManager(LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false))
+        localAdapter = LocalCollectionsAdapter(context, localCollections)
+        binding.collectionRecycler.adapter = localAdapter
+        placeLocalMarkerOnMap(localCollections)
+
+
+    }
 
 
     private fun getProjectDetail() {
@@ -149,6 +192,7 @@ class CollectionActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.On
                     if (response.isSuccessful) {
 
                         mMap.clear()
+
                         getProjectDetail()
                         Constants.collections.clear()
 
@@ -178,14 +222,36 @@ class CollectionActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.On
 
         binding.iconDelete.setOnClickListener {
 
-            val s: String = TextUtils.join(",", Constants.collections)
-            if (!s.isEmpty()){
+            //local work
+            var size = Constants.localCollections.size
 
-                deleteColection(s)
+            if (size == 1){
+
+                myAppDatabase.collectionDao().deleteCollection(Constants.localCollections[0])
+
+            }else if (size > 1){
+
+                for (i in 0.. Constants.localCollections.size-1){
+                    myAppDatabase.collectionDao().deleteCollection(Constants.localCollections[i])
+                }
 
             }else{
                 utilities.makeToast(context,"Please select collection")
             }
+
+            mMap.clear()
+            getLocalProjectDetailafterDelete()
+            Constants.localCollections = ArrayList()
+
+            //api work for delete
+//            val s: String = TextUtils.join(",", Constants.collections)
+//            if (!s.isEmpty()){
+//
+//                deleteColection(s)
+//
+//            }else{
+//                utilities.makeToast(context,"Please select collection")
+//            }
 
 
         }
@@ -194,6 +260,8 @@ class CollectionActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.On
     private fun initt() {
         context = this
         if (!::utilities.isInitialized) utilities = Utilities(this)
+        myAppDatabase = Room.databaseBuilder(this, MyAppDataBase::class.java, "VISIODB").allowMainThreadQueries().build()
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -202,6 +270,11 @@ class CollectionActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.On
         mMap.uiSettings.isZoomControlsEnabled = true
         mMap.setOnMarkerClickListener(this)
         setUpMap()
+        if (localCollections.size > 0){
+
+            placeLocalMarkerOnMap(localCollections)
+        }
+
     }
 
     private fun setUpMap() {
@@ -226,6 +299,37 @@ class CollectionActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.On
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLong, 12f))
             }
         }
+    }
+
+    private fun placeLocalMarkerOnMap(collections: List<LocalCollection>) {
+
+        val height = 120
+        val width = 120
+        val bitmapdraw = resources.getDrawable(com.visio.app.R.drawable.black_marker) as BitmapDrawable
+        val b = bitmapdraw.bitmap
+        val smallMarker = Bitmap.createScaledBitmap(b, width, height, false)
+
+        for (i in 0 .. collections.size-1){
+
+            var latt = collections[i].latitude
+            var lngg = collections[i].longitude
+
+            if (latt.equals("0.0") || lngg.equals("0.0")){
+
+                Log.d("nomaker",latt+" "+lngg)
+            }else{
+
+                var latlng = LatLng(collections[i].latitude.toDouble(),collections[i].longitude.toDouble())
+                Log.d("latlng",latlng.toString())
+                val markerOptions = MarkerOptions().position(latlng)
+                markerOptions.title(collections[i].collection_name)
+                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                mMap.addMarker(markerOptions)
+            }
+
+        }
+
+
     }
 
     private fun placeMarkerOnMap(collections: ArrayList<Collection>) {
