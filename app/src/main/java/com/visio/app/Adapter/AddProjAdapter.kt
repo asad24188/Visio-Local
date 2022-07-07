@@ -21,7 +21,8 @@ import java.util.*
 
 class AddProjAdapter(
     val context: Context,
-    val listModel: ArrayList<Project>
+    val listModel: ArrayList<Project>,
+    val clicklisnetr: ItemClickListener
 ): RecyclerView.Adapter<AddProjAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
@@ -71,11 +72,14 @@ class AddProjAdapter(
 
         holder.itemView.setOnClickListener {
 
-                Constants.PROJECT_ID = model.id.toString()
+            clicklisnetr.onItemClicked(model)
+            Constants.PROJECT_ID = model.id.toString()
                 context.startActivity(Intent(context, CollectionActivity::class.java))
         }
 
         holder.itemView.setOnLongClickListener{
+
+            clicklisnetr.onLongPress(model)
 
             if (model.checked) {
 
@@ -96,5 +100,10 @@ class AddProjAdapter(
 
     override fun getItemCount(): Int {
         return listModel.size
+    }
+
+    interface ItemClickListener {
+        fun onItemClicked(model: Project)
+        fun onLongPress(model: Project)
     }
 }

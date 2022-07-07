@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -37,7 +39,6 @@ import com.kircherelectronics.fsensor.observer.SensorSubject
 import com.kircherelectronics.fsensor.sensor.FSensor
 import com.kircherelectronics.fsensor.sensor.gyroscope.GyroscopeSensor
 import com.mtechsoft.compassapp.networking.Constants
-import com.visio.app.Adapter.LocalCollectionsAdapter
 import com.visio.app.DataModel.BaseResponse
 import com.visio.app.DataModel.projectDetail.Collection
 import com.visio.app.DataModel.projectDetail.ProjectDetailResponse
@@ -358,11 +359,21 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                         if (!id3.isEmpty()){
                             if (imageCount > 0){
 
+
+                                //api work
+
+                                val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+                                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)!!.state == NetworkInfo.State.CONNECTED ||
+                                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)!!.state == NetworkInfo.State.CONNECTED
+                                ) {
+
+                                    callApi(Constants.PROJECT_ID_FOR_API,collectionName,id1,id2,id3,action)
+                                }
+
                                 //local work
                                 addLocalCollection(projectId, collectionName, id1, id2, id3, action)
 
-                                //api work
-//                                callApi(projectId,collectionName,id1,id2,id3,action)
+
 
                             }else{
                                 utilities.makeToast(context,"Please upload images")
@@ -401,11 +412,18 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                         if (!id3.isEmpty()){
                             if (imageCount > 0){
 
-                                //local work
-                                addLocalCollection(projectId,collectionName,id1,id2,id3,action)
-
                                 //api work
-//                                callApi(projectId,collectionName,id1,id2,id3,action)
+
+                                val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+                                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)!!.state == NetworkInfo.State.CONNECTED ||
+                                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)!!.state == NetworkInfo.State.CONNECTED
+                                ) {
+
+                                    callApi(Constants.PROJECT_ID_FOR_API,collectionName,id1,id2,id3,action)
+                                }
+
+                                //local work
+                                addLocalCollection(projectId, collectionName, id1, id2, id3, action)
 
                             }else{
                                 utilities.makeToast(context,"Please upload images")
@@ -479,6 +497,8 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         val lat = gpsTracker.latitude.toString()
         val lng = gpsTracker.longitude.toString()
 
+
+
         for (file in imageFiles) {
             val surveyBody = RequestBody.create(MediaType.parse("*/*"), file)
             multiImages.add(MultipartBody.Part.createFormData("images[]", file!!.path, surveyBody))
@@ -492,7 +512,7 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
         val latt: RequestBody = RequestBody.create(MediaType.parse("text/plain"), lat)
         val lngg: RequestBody = RequestBody.create(MediaType.parse("text/plain"), lng)
 
-        utilities.showProgressDialog(context,"Processing ...")
+//        utilities.showProgressDialog(context,"Processing ...")
         val apiClient = ApiClient()
         apiClient.getApiService().createPost(pId,cName,Id1,Id2,Id3,latt,lngg,multiImages)
             .enqueue(object : Callback<BaseResponse> {
@@ -501,14 +521,8 @@ class CameraActivity : AppCompatActivity(),AdapterBTsheetImages.ItemClickListene
                     utilities.hideProgressDialog()
                     if (response.isSuccessful) {
 
-                        utilities.makeToast(context,response.body()!!.message)
-                        if (action.equals("done")){
-                            finish()
-                        }else{
+//                        utilities.makeToast(context,response.body()!!.message)
 
-                            startActivity(Intent(context,CameraActivity::class.java))
-                            finish()
-                        }
 
                     } else {
 

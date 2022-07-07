@@ -52,7 +52,7 @@
             android:layout_width="@dimen/_35sdp"
             android:layout_height="@dimen/_37sdp"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true">
+            android:layout_toLeftOf="@id/icon_upload">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -69,7 +69,7 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:layout_width="match_parent"

@@ -1,7 +1,6 @@
 package com.visio.app.Adapter
 
 import android.content.Context
-import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.view.LayoutInflater
@@ -13,16 +12,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.fed.fedsense.RoomDB.LocalProject
 import com.mtechsoft.compassapp.networking.Constants
-import com.visio.app.Activity.CollectionActivity
-import com.visio.app.DataModel.projects.Project
 import com.visio.app.R
-import java.text.SimpleDateFormat
 import java.util.*
 
 
 class LocalProjectsAdapter(
     val context: Context,
-    val listModel: List<LocalProject>
+    val listModel: List<LocalProject>,
+    val clicklisnetr: ItemClickListener
 ): RecyclerView.Adapter<LocalProjectsAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)  {
@@ -73,9 +70,7 @@ class LocalProjectsAdapter(
 //        holder.date.text = date
 
         holder.itemView.setOnClickListener {
-
-                Constants.PROJECT_ID = model.id.toString()
-                context.startActivity(Intent(context, CollectionActivity::class.java))
+            clicklisnetr.onItemClicked(model,position)
         }
 
         holder.itemView.setOnLongClickListener{
@@ -102,5 +97,10 @@ class LocalProjectsAdapter(
 
     override fun getItemCount(): Int {
         return listModel.size
+    }
+
+    interface ItemClickListener {
+        fun onItemClicked(model: LocalProject, position: Int)
+        fun onLongPress(model: LocalProject)
     }
 }

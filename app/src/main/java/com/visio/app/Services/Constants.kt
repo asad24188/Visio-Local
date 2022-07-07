@@ -12,6 +12,7 @@ object Constants {
     const val LOGIN_STATUS = "login_status"
 
     var PROJECT_ID = ""
+    var PROJECT_ID_FOR_API = ""
     var PROJECT_ID_TO_DELETE = ""
     var SELECTION_MODE_ON = false
     var strings: ArrayList<String> = ArrayList()

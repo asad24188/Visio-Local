@@ -6,7 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
@@ -38,9 +41,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(),LocalProjectsAdapter.ItemClickListener {
 
     lateinit var binding: ActivityHomeBinding
     private lateinit var utilities: Utilities
@@ -68,7 +70,7 @@ class HomeActivity : AppCompatActivity() {
         loadall()
 
         //api work
-//        getProjects()
+        getProjects()
 
     }
 
@@ -78,7 +80,7 @@ class HomeActivity : AppCompatActivity() {
         localProjects = ArrayList()
         localProjects = myAppDatabase.cardDao().loadAll(userId)
         binding.projectRecycler.layoutManager = LinearLayoutManager(context)
-        localProjectsAdapter = LocalProjectsAdapter(context,localProjects)
+        localProjectsAdapter = LocalProjectsAdapter(context,localProjects,this)
         binding.projectRecycler.adapter = localProjectsAdapter
 
     }
@@ -87,7 +89,7 @@ class HomeActivity : AppCompatActivity() {
 
         var url = "view-project/"+utilities.getUserId(context)
 
-        utilities.showProgressDialog(context,"Processing ...")
+//        utilities.showProgressDialog(context,"Processing ...")
         val apiClient = ApiClient()
         apiClient.getApiService().getProjects(url)
             .enqueue(object : Callback<ProjectsResponse> {
@@ -98,15 +100,15 @@ class HomeActivity : AppCompatActivity() {
 
                     list = ArrayList()
                     list = response.body()!!.data
-                    if (list.size>0){
-
-                        binding.projectRecycler.layoutManager = LinearLayoutManager(context)
-                        adapter = AddProjAdapter(context,list)
-                        binding.projectRecycler.adapter = adapter
-
-                    }else{
-                        utilities.makeToast(context,"No project found ...")
-                    }
+//                    if (list.size>0){
+//
+//                        binding.projectRecycler.layoutManager = LinearLayoutManager(context)
+//                        adapter = AddProjAdapter(context,list)
+//                        binding.projectRecycler.adapter = adapter
+//
+//                    }else{
+//                        utilities.makeToast(context,"No project found ...")
+//                    }
 
 
                 } else {
@@ -127,6 +129,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun clicks() {
+
+
+
 
         binding.btnAddproj.setOnClickListener {
             popupwuthdraw()
@@ -166,22 +171,42 @@ class HomeActivity : AppCompatActivity() {
 
             //api work for delete
 
-//            val s: String = TextUtils.join(",", Constants.strings)
-//            if (!s.isEmpty()){
-//
-//                deleteProject(s)
-//
-//            }else{
-//                utilities.makeToast(context,"Please select project")
-//            }
+            val s: String = TextUtils.join(",", Constants.strings)
+            if (!s.isEmpty()){
 
+                deleteProject(s)
+
+            }else{
+                utilities.makeToast(context,"Please select project")
+            }
+
+        }
+
+        binding.iconUpload.setOnClickListener {
+
+            if (localProjects.size > 0)
+            {
+
+                utilities.showProgressDialog(context,"Uploading data")
+                Handler().postDelayed(Runnable {
+
+                    utilities.hideProgressDialog()
+                    utilities.makeToast(context,"Data updated")
+
+                    }, 3000)
+            }else
+            {
+
+                utilities.makeToast(context,"No Data Found")
+
+            }
         }
     }
 
     private fun deleteProject(pIds: String) {
 
         var url = "delete-project/"+pIds
-        utilities.showProgressDialog(context,"Deleting ...")
+//        utilities.showProgressDialog(context,"Deleting ...")
         val apiClient = ApiClient()
         apiClient.getApiService().deleteProject(url)
             .enqueue(object : Callback<BaseResponse> {
@@ -231,7 +256,13 @@ class HomeActivity : AppCompatActivity() {
                 //local work
                 addLocalProject(name,dialog)
                 //api work
-//                callApi(name,dialog)
+                val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)!!.state == NetworkInfo.State.CONNECTED ||
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)!!.state == NetworkInfo.State.CONNECTED
+                ) {
+                    callApi(name,dialog)
+
+                }
             }else{ utilities.makeToast(context,"Enter Name") }
         }
 
@@ -267,6 +298,7 @@ class HomeActivity : AppCompatActivity() {
         myAppDatabase.cardDao().addProject(project)
         utilities.makeToast(context,"added")
         loadall()
+        getProjects()
         dialog.dismiss()
 
     }
@@ -281,7 +313,6 @@ class HomeActivity : AppCompatActivity() {
         val lng = gpsTracker.longitude.toString()
 
         var userId = utilities.getUserId(context)
-        utilities.showProgressDialog(context,"Processing ...")
         val apiClient = ApiClient()
         apiClient.getApiService().addProject(userId,name,lat,lng)
             .enqueue(object : Callback<BaseResponse> {
@@ -289,9 +320,9 @@ class HomeActivity : AppCompatActivity() {
 
                     utilities.hideProgressDialog()
                     if (response.isSuccessful) {
-                        utilities.makeToast(context,response.body()!!.message)
-                        dialog.dismiss()
-                        getProjects()
+
+//                        utilities.makeToast(context,response.body()!!.message)
+
                     } else {
 
                         utilities.hideProgressDialog()
@@ -341,6 +372,18 @@ class HomeActivity : AppCompatActivity() {
                     ).show()
                 }
             }
+    }
+
+    override fun onItemClicked(model: LocalProject, position: Int) {
+
+
+        Constants.PROJECT_ID = model.id.toString()
+        Constants.PROJECT_ID_FOR_API = list[position].id.toString()
+        context.startActivity(Intent(context, CollectionActivity::class.java))
+    }
+
+    override fun onLongPress(model: LocalProject) {
+
     }
 
 }
